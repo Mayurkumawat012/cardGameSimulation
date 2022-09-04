@@ -11,9 +11,6 @@
   "keywords": [],
   "description": "",
   "dependencies": {
-    "logger": "^0.0.1",
-    "logging": "^3.3.0",
-    "node-color-log": "^10.0.2",
-    "winston": "^3.8.1"
+    "node-color-log": "^10.0.2"
   }
 }
