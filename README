@@ -1,0 +1,14 @@
+To Start the game, you just need to run index.js
+
+-> Command `node index.js`
+
+-------Working--------
+
+Different functions and there working
+-> function isSimilar() // returns you card if all 3 cards are same
+-> function isSequence() // returns you max card if all 3 cards in seq
+-> function highestPair() // returns you card if 2 pairs of card are same
+-> function topCard() // returns you the biggest cards from 3
+-> function findMaxCard() // will return max card
+
+---------||---------
