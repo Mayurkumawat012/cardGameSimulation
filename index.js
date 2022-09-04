@@ -1,47 +1,11 @@
 import { cards } from "./cards.js"
-import { pick4cards, highestPair, isSimilar, isSequence, topCard, isAllNull,pick1card, findMaxCard } from "./handler.js"
+import { pick4cards, highestPair, isSimilar, isSequence, topCard, isAllNull,pick1card, findMaxCard,handelWinner } from "./handler.js"
+import logger from 'node-color-log'
 
-export function recursiveFunctionToHandelTie(players) {
-    console.log("Tie Between Players,",players," Picking random cards to decide winner");
-
-    let results= []
-    for (let i = 0; i < players.length; i++) {
-        results.push(pick1card(cards))
-    }
-
-    // results= [ '2', 'J', '6', 'J' ]
-    console.log("new cards",{players, results});
-    let newPlayers = []
-    let mxChar = findMaxCard(results)
-    for (let i = 0; i < results.length; i++) {
-        if (results[i] === mxChar) {
-            newPlayers.push(players[i])
-        }
-    }
-
-    if (newPlayers.length === 1) {
-        return newPlayers[0]
-    } 
-    return recursiveFunctionToHandelTie(newPlayers)
-    
-}
-
-export function handelWinner(results) {
-    let players = []
-
-    let mxChar = findMaxCard(results)
-    for (let i = 0; i < results.length; i++) {
-        if (results[i] !== null && results[i] === mxChar) {
-            if (results[i] === mxChar) {
-                players.push(i+1)
-            }
-        }
-    }
-    if (players.length === 1) {
-        return players[0]
-    }
-    return recursiveFunctionToHandelTie(players)
-    
+function printPlayersCards(players) {
+    players.forEach((player,i) => {
+        logger.info(`player-${i+1}`,player)
+    }); 
 }
 
 function gameSimulate() {
@@ -59,7 +23,8 @@ function gameSimulate() {
         players[2].push(card3)
         players[3].push(card4)
     }
-    console.log(players);
+    // console.log(players);
+    printPlayersCards(players)
 
     let playerResult = [null, null, null, null]
 
@@ -71,8 +36,9 @@ function gameSimulate() {
     }
 
     if (!isAllNull(playerResult)) {
-        console.log({isSim:true,playerResult});
-        return handelWinner(playerResult)
+        // console.log({isSim:true,playerResult});
+        logger.info('Similar Cards', {playerResult});
+        return handelWinner(playerResult,cards)
     }
 
     for (let i = 0; i < 4; i++) {
@@ -82,8 +48,9 @@ function gameSimulate() {
         }
     }
     if (!isAllNull(playerResult)) {
-        console.log({isSeq:true,playerResult});
-        return handelWinner(playerResult) 
+        // console.log({isSeq:true,playerResult});
+        logger.info('Sequential Cards', {playerResult});
+        return handelWinner(playerResult,cards) 
     }
 
     for (let i = 0; i < 4; i++) {
@@ -93,8 +60,9 @@ function gameSimulate() {
         }
     }
     if (!isAllNull(playerResult)) {
-        console.log({higPair:true,playerResult});
-        return handelWinner(playerResult)
+        // console.log({higPair:true,playerResult});
+        logger.info('Similar Pairs of Cards', {playerResult});
+        return handelWinner(playerResult,cards)
     }
 
     
@@ -104,9 +72,11 @@ function gameSimulate() {
             playerResult[i] = top
         }
     }
-    console.log({top:true,playerResult});
-    return handelWinner(playerResult)
+    // console.log({top:true,playerResult});
+    logger.info('Top Cards', {playerResult});
+    return handelWinner(playerResult,cards)
 }
 
 
-console.log({winnerPlayer:gameSimulate()});
+logger.info({winnerPlayer:gameSimulate()})
+// console.log({winnerPlayer:gameSimulate()});

@@ -1,6 +1,10 @@
+import logger from 'node-color-log'
+
+
 function pick1card(cards) {
     let cardKeys = Object.keys(cards)
     if (cardKeys.length < 1) {
+        logger.error({error:"not enough cards to play"})
         throw new Error("not enough cards to play")
     }
     const card1 = cardKeys[Math.floor(Math.random() * cardKeys.length)];
@@ -11,6 +15,7 @@ function pick1card(cards) {
 function pick4cards(cards) {
     let cardKeys = Object.keys(cards)
     if (cardKeys.length < 4) {
+        logger.error({error:"not enough cards for all players"})
         throw new Error("not enough cards for all players")
     }
 
@@ -31,6 +36,52 @@ function pick4cards(cards) {
 
     return [card1,card2, card3, card4]
 
+}
+
+function recursiveFunctionToHandelTie(players, cards) {
+    // console.log("Tie Between Players,",players," Picking random cards to decide winner");
+    logger.warn("Tie Between Players,",players," Picking random cards to decide winner")
+
+    let results= []
+    for (let i = 0; i < players.length; i++) {
+        results.push(pick1card(cards))
+    }
+
+    // results= [ '2', 'J', '6', 'J' ]
+    // console.log("new cards",{players, results});
+    logger.info("new cards",{players, results})
+
+    let newPlayers = []
+    let mxChar = findMaxCard(results)
+    for (let i = 0; i < results.length; i++) {
+        if (results[i] === mxChar) {
+            newPlayers.push(players[i])
+        }
+    }
+
+    if (newPlayers.length === 1) {
+        return newPlayers[0]
+    } 
+    return recursiveFunctionToHandelTie(newPlayers,cards)
+    
+}
+
+function handelWinner(results,cards) {
+    let players = []
+
+    let mxChar = findMaxCard(results)
+    for (let i = 0; i < results.length; i++) {
+        if (results[i] !== null && results[i] === mxChar) {
+            if (results[i] === mxChar) {
+                players.push(i+1)
+            }
+        }
+    }
+    if (players.length === 1) {
+        return players[0]
+    }
+    return recursiveFunctionToHandelTie(players,cards)
+    
 }
 
 function isAllNull(playerResult) {
@@ -147,4 +198,4 @@ function findMaxCard(allCards) {
     }
     return char
 }
-export { pick4cards, highestPair, isSimilar, isSequence, topCard, isAllNull,pick1card, findMaxCard }
+export { pick4cards, highestPair, isSimilar, isSequence, topCard, isAllNull,pick1card, findMaxCard, handelWinner }
